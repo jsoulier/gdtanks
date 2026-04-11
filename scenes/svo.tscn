@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bl8cxdd2yk7ng"]
+
+[ext_resource type="Script" uid="uid://o6swh1ic13qk" path="res://scripts/svo.gd" id="1_iayx2"]
+
+[node name="SVO" type="Node3D" unique_id=731219683]
+script = ExtResource("1_iayx2")
+debug_depth = 5
+metadata/_custom_type_script = "uid://o6swh1ic13qk"

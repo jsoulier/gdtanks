@@ -1,0 +1,51 @@
+[gd_scene format=4 uid="uid://5ta7wgrjmhjt"]
+
+[ext_resource type="PackedScene" uid="uid://25n2ntptm3wp" path="res://scenes/camera.tscn" id="1_2q6dc"]
+[ext_resource type="PackedScene" uid="uid://bl8cxdd2yk7ng" path="res://scenes/svo.tscn" id="2_w7c3h"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_w7c3h"]
+sky_top_color = Color(1, 1, 1, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Sky" id="Sky_w8frs"]
+sky_material = SubResource("ProceduralSkyMaterial_w7c3h")
+
+[sub_resource type="Environment" id="Environment_mx8sn"]
+background_mode = 2
+sky = SubResource("Sky_w8frs")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_w7c3h"]
+_surfaces = [{
+"aabb": AABB(-12.5, -0.5, -12.5, 25, 1, 25),
+"attribute_data": PackedByteArray("AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/"),
+"format": 34359738391,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 36,
+"vertex_data": PackedByteArray("AABIwQAAAL8AAEhBAABIwQAAAL8AAEjBAABIwQAAAD8AAEjBAABIQQAAAL8AAEjBAABIwQAAAL8AAEjBAABIwQAAAL8AAEhBAABIwQAAAD8AAEjBAABIwQAAAL8AAEjBAABIQQAAAL8AAEjBAABIwQAAAD8AAEjBAABIwQAAAD8AAEhBAABIwQAAAL8AAEhBAABIwQAAAL8AAEhBAABIwQAAAD8AAEhBAABIQQAAAD8AAEhBAABIQQAAAD8AAEhBAABIwQAAAD8AAEhBAABIwQAAAD8AAEjBAABIwQAAAL8AAEhBAABIQQAAAL8AAEhBAABIQQAAAL8AAEjBAABIQQAAAD8AAEhBAABIQQAAAL8AAEhBAABIwQAAAL8AAEhBAABIQQAAAL8AAEjBAABIQQAAAL8AAEhBAABIQQAAAD8AAEhBAABIQQAAAL8AAEjBAABIQQAAAD8AAEjBAABIwQAAAD8AAEjBAABIwQAAAD8AAEjBAABIQQAAAD8AAEjBAABIQQAAAD8AAEhBAABIQQAAAD8AAEhBAABIQQAAAD8AAEjBAABIQQAAAL8AAEjBAAD/f/9//n8AAP9//3/+fwAA/3//f/5//38AAP//AAD/fwAA//8AAP9/AAD//wAA/////wAA/z//////AAD/P/////8AAP8/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//3//fwAA/z//f/9/AAD/P/9//38AAP8//3//////AAD/f/////8AAP9//////wAA/38AAP//AAD/fwAA//8AAP9/AAD//wAA/3//fwAA/z//f/9/AAD/P/9//38AAP8/////f/9//n////9//3/+f////3//f/5//////wAA/z//////AAD/P/////8AAP8//3//////AAD/f/////8AAP9//////wAA////f/9//n////9//3/+f////3//f/5/")
+}]
+
+[node name="Level" type="Node3D" unique_id=2040351949]
+
+[node name="Camera" parent="." unique_id=561337490 instance=ExtResource("1_2q6dc")]
+
+[node name="SVO" parent="." unique_id=731219683 node_paths=PackedStringArray("scene") instance=ExtResource("2_w7c3h")]
+scene = NodePath("..")
+max_depth = 7
+debug_depth = 6
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1497033466]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1395548923]
+environment = SubResource("Environment_mx8sn")
+
+[node name="Geometry" type="StaticBody3D" parent="." unique_id=1936393767]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Geometry" unique_id=1450802080]
+visible = false
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Geometry/CSGCombiner3D" unique_id=1602296222]
+transform = Transform3D(25, 0, 0, 0, 1, 0, 0, 0, 25, 0, 0, 0)
+
+[node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="Geometry" unique_id=242413917]
+mesh = SubResource("ArrayMesh_w7c3h")

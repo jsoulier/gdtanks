@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://b3qfed0n1wso4"]
+
+[node name="Tank" type="CharacterBody3D" unique_id=1525166348]
