@@ -85,6 +85,7 @@ func _new_node() -> int:
 	return index
 
 @export var scene: Node3D = null
+@export var excludes: Array[PackedScene] = []
 @export_range(1, 10) var max_depth: int = 5
 @export_range(1, 10) var debug_depth: int = max_depth
 @export_dir var out_directory: String = "res://data/"
@@ -149,6 +150,9 @@ func _read() -> void:
 	_get_debug_lines()
 
 func _get_triangles(node: Node, out: Array[Triangle]) -> void:
+	for exclude: PackedScene in excludes:
+		if exclude.resource_path == node.scene_file_path:
+			return
 	if node is MeshInstance3D and node.mesh:
 		var xform: Transform3D = node.global_transform
 		for i in range(node.mesh.get_surface_count()):

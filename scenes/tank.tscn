@@ -1,3 +1,57 @@
 [gd_scene format=3 uid="uid://b3qfed0n1wso4"]
 
+[ext_resource type="Script" uid="uid://bhnmcqvg5hvr0" path="res://scripts/tank.gd" id="1_qrxud"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_vbf0h"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qrxud"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_c4xvs"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_01nm4"]
+points = PackedVector3Array(-0.5, -0.25, -0.5, 0.5, 0.25, 0.5, 0.5, -0.25, 0.5, 0.5, 0.25, -0.5, -0.5, 0.25, 0.5, 0.5, -0.25, -0.5, -0.5, -0.25, 0.5, -0.5, 0.25, -0.5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vbf0h"]
+points = PackedVector3Array(-0.05, -0.05, -0.75, 0.05, 0.05, 0.75, 0.05, -0.05, 0.75, 0.05, 0.05, -0.75, -0.05, 0.05, 0.75, 0.05, -0.05, -0.75, -0.05, -0.05, 0.75, -0.05, 0.05, -0.75)
+
 [node name="Tank" type="CharacterBody3D" unique_id=1525166348]
+script = ExtResource("1_qrxud")
+
+[node name="FrontMeshInstance3D" type="MeshInstance3D" parent="." unique_id=928402918]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+mesh = SubResource("BoxMesh_vbf0h")
+
+[node name="FrontCollisionShape3D" type="CollisionShape3D" parent="." unique_id=1945117501]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+shape = SubResource("BoxShape3D_qrxud")
+
+[node name="BackMeshInstance3D" type="MeshInstance3D" parent="." unique_id=1270439681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+mesh = SubResource("BoxMesh_vbf0h")
+
+[node name="BackCollisionShape3D" type="CollisionShape3D" parent="." unique_id=434967056]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+shape = SubResource("BoxShape3D_qrxud")
+
+[node name="Turret" type="StaticBody3D" parent="." unique_id=1181149099]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Turret" unique_id=632562552]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("BoxMesh_c4xvs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Turret" unique_id=387413224]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("ConvexPolygonShape3D_01nm4")
+
+[node name="Barrel" type="StaticBody3D" parent="Turret" unique_id=1605494743]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Turret/Barrel" unique_id=646792733]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 1.5, 0, 0.75, -1.25)
+mesh = SubResource("BoxMesh_c4xvs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Turret/Barrel" unique_id=1292329578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -1.25)
+shape = SubResource("ConvexPolygonShape3D_vbf0h")
+
+[node name="Muzzle" type="Node3D" parent="Turret/Barrel" unique_id=1534201243]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -2)

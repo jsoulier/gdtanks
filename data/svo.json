@@ -1,8 +1,8 @@
 {
 	"max_depth": 7,
 	"node_count": 5461,
-	"position_x": -12.5,
+	"position_x": -50.0,
 	"position_y": -0.5,
-	"position_z": -12.5,
-	"size": 25.0
+	"position_z": -50.0,
+	"size": 100.0
 }

@@ -1,4 +1,4 @@
-class_name Camera extends Camera3D
+class_name FreeCamera extends Controller
 
 @export var move_speed: float = 10.0
 @export var move_speed_min: float = 0.1
@@ -6,6 +6,7 @@ class_name Camera extends Camera3D
 @export var move_smoothing: float = 10.0
 @export var move_sensitivity: float = 1.2
 @export var sensitivity: float = 0.2
+@onready var _camera: Camera3D = $Camera3D
 var _velocity: Vector3 = Vector3.ZERO
 var _yaw: float = 0.0
 var _pitch: float = 0.0
@@ -74,7 +75,7 @@ func get_view_matrix() -> Projection:
 	return Projection(global_transform.inverse())
 
 func get_proj_matrix() -> Projection:
-	return get_camera_projection()
+	return _camera.get_camera_projection()
 
 func get_view_proj_matrix() -> Projection:
 	return get_proj_matrix() * get_view_matrix()
@@ -83,7 +84,7 @@ func get_inv_view_matrix() -> Projection:
 	return Projection(global_transform)
 
 func get_inv_proj_matrix() -> Projection:
-	return get_camera_projection().inverse()
+	return _camera.get_camera_projection().inverse()
 
 func get_view_buffer() -> PackedFloat32Array:
 	return _get_buffer(get_view_matrix())
