@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bl8cxdd2yk7ng" path="res://scenes/svo.tscn" id="2_w7c3h"]
 [ext_resource type="PackedScene" uid="uid://b3qfed0n1wso4" path="res://scenes/tank.tscn" id="2_w8frs"]
-[ext_resource type="PackedScene" uid="uid://25n2ntptm3wp" path="res://scenes/free_camera.tscn" id="3_w8frs"]
+[ext_resource type="PackedScene" uid="uid://25n2ntptm3wp" path="res://scenes/camera.tscn" id="3_mx8sn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_w7c3h"]
 sky_top_color = Color(1, 1, 1, 1)
@@ -62,4 +62,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -25)
 
 [node name="Tank" parent="Spawnpoints/1" unique_id=1525166348 instance=ExtResource("2_w8frs")]
-controller = ExtResource("3_w8frs")
+controller = ExtResource("3_mx8sn")
+
+[node name="2" type="Node3D" parent="Spawnpoints" unique_id=1401324429]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 25, 0, 0)
+
+[node name="Tank" parent="Spawnpoints/2" unique_id=1214723552 instance=ExtResource("2_w8frs")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="3" type="Node3D" parent="Spawnpoints" unique_id=1779559130]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -25, 0, 0)
+
+[node name="Tank" parent="Spawnpoints/3" unique_id=135515568 instance=ExtResource("2_w8frs")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 0, 0, 0)
+
+[node name="4" type="Node3D" parent="Spawnpoints" unique_id=970731973]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 25)
+
+[node name="Tank" parent="Spawnpoints/4" unique_id=1936965848 instance=ExtResource("2_w8frs")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)

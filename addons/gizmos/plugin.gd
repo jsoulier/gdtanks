@@ -7,4 +7,3 @@ func _enter_tree() -> void:
 
 func _exit_tree() -> void:
 	remove_node_3d_gizmo_plugin(custom_node3d_gizmo)
-

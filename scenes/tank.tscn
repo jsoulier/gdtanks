@@ -55,3 +55,6 @@ shape = SubResource("ConvexPolygonShape3D_vbf0h")
 
 [node name="Muzzle" type="Node3D" parent="Turret/Barrel" unique_id=1534201243]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -2)
+
+[node name="Camera" type="Node3D" parent="." unique_id=713211482]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 1)
