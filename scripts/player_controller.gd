@@ -1,12 +1,16 @@
-class_name Camera extends Controller
+class_name PlayerController extends Controller
 
 static var CONTROLLERS: Array[GDScript] = [
-	preload("res://scripts/free_camera.gd"),
-	preload("res://scripts/tank_camera.gd"),
+	preload("res://scripts/player_controller_tank_impl.gd"),
+	preload("res://scripts/player_controller_free_impl.gd"),
 ]
 
-@onready var _camera: Camera3D = $Camera3D
-var _controller: CameraController = null
+@onready var camera: Camera3D = $Camera3D
+@onready var muzzle_crosshair: Control = $Control/MuzzleCrosshair
+@onready var camera_crosshair: Control = $Control/CameraCrosshair
+@onready var camera_raycast: RayCast3D = $Camera3D/CameraRayCast3D
+@onready var muzzle_raycast: RayCast3D = $MuzzleRayCast3D
+var _controller: PlayerControllerImpl = null
 var _controller_index: int = 0
 var _captured: bool = false
 
@@ -15,10 +19,10 @@ func _ready() -> void:
 
 func _change_camera():
 	_controller = CONTROLLERS[_controller_index].new()
-	_controller.node = self
+	_controller.controller = self
 	_controller_index = (_controller_index + 1) % CONTROLLERS.size()
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		match event.button_index:
 			MOUSE_BUTTON_LEFT:
@@ -59,7 +63,7 @@ func get_view_matrix() -> Projection:
 	return Projection(global_transform.inverse())
 
 func get_proj_matrix() -> Projection:
-	return _camera.get_camera_projection()
+	return camera.get_camera_projection()
 
 func get_view_proj_matrix() -> Projection:
 	return get_proj_matrix() * get_view_matrix()
@@ -68,7 +72,7 @@ func get_inv_view_matrix() -> Projection:
 	return Projection(global_transform)
 
 func get_inv_proj_matrix() -> Projection:
-	return _camera.get_camera_projection().inverse()
+	return camera.get_camera_projection().inverse()
 
 func get_view_buffer() -> PackedFloat32Array:
 	return _get_buffer(get_view_matrix())

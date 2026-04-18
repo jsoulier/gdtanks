@@ -1,9 +1,0 @@
-[gd_scene format=3 uid="uid://25n2ntptm3wp"]
-
-[ext_resource type="PackedScene" uid="uid://b2tms2u31flhh" path="res://scenes/controller.tscn" id="1_cvpoc"]
-[ext_resource type="Script" uid="uid://bw3oke0j2qgkl" path="res://scripts/camera.gd" id="2_kod1s"]
-
-[node name="Camera" unique_id=2067793415 instance=ExtResource("1_cvpoc")]
-script = ExtResource("2_kod1s")
-
-[node name="Camera3D" type="Camera3D" parent="." index="0" unique_id=2009389785]

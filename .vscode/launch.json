@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "a_plague_tale",
+            "name": "gdtanks",
             "type": "godot",
             "request": "launch",
             "project": "",

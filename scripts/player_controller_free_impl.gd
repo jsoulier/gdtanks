@@ -1,4 +1,4 @@
-class_name FreeCamera extends CameraController
+class_name PlayerControllerFreeImpl extends PlayerControllerImpl
 
 @export var move_speed: float = 10.0
 @export var move_speed_min: float = 0.1
@@ -15,7 +15,7 @@ func input(event: InputEvent) -> void:
 		_yaw -= event.relative.x * sensitivity
 		_pitch -= event.relative.y * sensitivity
 		_pitch = clamp(_pitch, -89.0, 89.0)
-		node.rotation_degrees = Vector3(_pitch, _yaw, 0.0)
+		controller.rotation_degrees = Vector3(_pitch, _yaw, 0.0)
 	if event is InputEventMouseButton:
 		match event.button_index:
 			MOUSE_BUTTON_WHEEL_UP:
@@ -26,13 +26,13 @@ func input(event: InputEvent) -> void:
 func process(delta: float) -> void:
 	var direction: Vector3 = Vector3.ZERO
 	if Input.is_action_pressed(&"forwards"):
-		direction -= node.global_transform.basis.z
+		direction -= controller.global_transform.basis.z
 	if Input.is_action_pressed(&"backwards"):
-		direction += node.global_transform.basis.z
+		direction += controller.global_transform.basis.z
 	if Input.is_action_pressed(&"left"):
-		direction -= node.global_transform.basis.x
+		direction -= controller.global_transform.basis.x
 	if Input.is_action_pressed(&"right"):
-		direction += node.global_transform.basis.x
+		direction += controller.global_transform.basis.x
 	if Input.is_action_pressed(&"up"):
 		direction += Vector3.UP
 	if Input.is_action_pressed(&"down"):
@@ -40,4 +40,6 @@ func process(delta: float) -> void:
 	if direction.length_squared() > 0.0:
 		direction = direction.normalized()
 	_velocity = _velocity.lerp(direction * move_speed, move_smoothing * delta)
-	node.global_position += _velocity * delta
+	controller.global_position += _velocity * delta
+	controller.camera_crosshair.visible = false
+	controller.muzzle_crosshair.visible = false
