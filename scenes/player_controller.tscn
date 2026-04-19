@@ -7,10 +7,13 @@
 top_level = true
 script = ExtResource("2_kod1s")
 
-[node name="Camera3D" type="Camera3D" parent="." index="0" unique_id=2009389785]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 3)
+[node name="SpringArm3D" type="SpringArm3D" parent="." index="0" unique_id=1638361745]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+spring_length = 5.0
 
-[node name="CameraRayCast3D" type="RayCast3D" parent="Camera3D" index="0" unique_id=1766772970]
+[node name="Camera3D" type="Camera3D" parent="SpringArm3D" index="0" unique_id=2009389785]
+
+[node name="CameraRayCast3D" type="RayCast3D" parent="SpringArm3D/Camera3D" index="0" unique_id=1766772970]
 target_position = Vector3(0, 0, -1000)
 collision_mask = 3
 
@@ -28,8 +31,10 @@ offset_bottom = 40.0
 layout_mode = 0
 offset_right = 5.0
 offset_bottom = 5.0
+color = Color(1, 0, 0, 1)
 
 [node name="CameraCrosshair" type="ColorRect" parent="Control" index="1" unique_id=1084368149]
 layout_mode = 0
 offset_right = 5.0
 offset_bottom = 5.0
+color = Color(0, 1, 0, 1)

@@ -5,10 +5,10 @@ static var CONTROLLERS: Array[GDScript] = [
 	preload("res://scripts/player_controller_free_impl.gd"),
 ]
 
-@onready var camera: Camera3D = $Camera3D
+@onready var camera: Camera3D = $SpringArm3D/Camera3D
 @onready var muzzle_crosshair: Control = $Control/MuzzleCrosshair
 @onready var camera_crosshair: Control = $Control/CameraCrosshair
-@onready var camera_raycast: RayCast3D = $Camera3D/CameraRayCast3D
+@onready var camera_raycast: RayCast3D = $SpringArm3D/Camera3D/CameraRayCast3D
 @onready var muzzle_raycast: RayCast3D = $MuzzleRayCast3D
 var _controller: PlayerControllerImpl = null
 var _controller_index: int = 0

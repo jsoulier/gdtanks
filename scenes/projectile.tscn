@@ -4,6 +4,9 @@
 
 [sub_resource type="BoxMesh" id="BoxMesh_c8fcr"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c8fcr"]
+albedo_color = Color(1, 0, 0, 1)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_q3m7n"]
 
 [node name="Projectile" type="RigidBody3D" unique_id=1242267007]
@@ -14,6 +17,7 @@ script = ExtResource("1_c8fcr")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1833138771]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 mesh = SubResource("BoxMesh_c8fcr")
+surface_material_override/0 = SubResource("StandardMaterial3D_c8fcr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1391198677]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)

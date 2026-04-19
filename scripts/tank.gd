@@ -1,17 +1,22 @@
 class_name Tank extends CharacterBody3D
 
+static var PROJECTILE: PackedScene = preload("res://scenes/projectile.tscn")
+
 @export var controller: PackedScene = null
 @export var turn_speed_degrees: float = 1.0
 @export var aim_speed_degrees: float = 20.0
-@export var max_force_newtons: float = 10.0
-@export var drag_coefficient: float = 1.0
+@export var max_force_newtons: float = 100.0
+@export var drag_coefficient: float = 10.0
 @export var mass_kg: float = 1.0
+@export var shoot_cooldown: float = 1.0
 @onready var turret: Node3D = $Turret
 @onready var muzzle: Node3D = $Turret/Muzzle
+@onready var _muzzle_particles: GPUParticles3D = $Turret/Muzzle/GPUParticles3D
 @onready var _target: Basis = basis
 @onready var _turret_target: Basis = turret.basis
 var _controller: Controller = null
 var _throttle: float = 0.0
+var _next_shoot_time: float = 0.0
 
 func _ready() -> void:
 	if controller:
@@ -40,3 +45,17 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	velocity *= 1.0 - drag_coefficient * delta
 	_throttle = 0.0
+
+func shoot(muzzle_velocity: float) -> void:
+	var seconds: float = Time.get_ticks_msec() / 1000
+	if _next_shoot_time > seconds:
+		return
+	_next_shoot_time = seconds + shoot_cooldown
+	var projectile = PROJECTILE.instantiate()
+	for level in get_tree().get_nodes_in_group(&"levels"):
+		level.add_child(projectile)
+		break
+	projectile.global_transform = muzzle.global_transform
+	projectile.shoot(muzzle_velocity)
+	_muzzle_particles.restart()
+	
