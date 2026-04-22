@@ -13,5 +13,8 @@ static func velocity(node: Node3D, v: Vector3, t: float) -> Vector3:
 static func time_of_flight(node: Node3D, v: Vector3) -> float:
 	return (2.0 * v.y) / _gravity(node)
 
+static func time_of_apex(node: Node3D, v: Vector3) -> float:
+	return v.y / _gravity(node)
+
 static func max_height(node: Node3D, v: Vector3) -> float:
 	return (v.y * v.y) / (2.0 * _gravity(node))

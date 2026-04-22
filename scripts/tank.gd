@@ -4,7 +4,7 @@ static var PROJECTILE: PackedScene = preload("res://scenes/projectile.tscn")
 
 @export var controller: PackedScene = null
 @export var turn_speed_degrees: float = 1.0
-@export var aim_speed_degrees: float = 20.0
+@export var aim_speed_degrees: float = 25.0
 @export var max_force_newtons: float = 100.0
 @export var drag_coefficient: float = 10.0
 @export var mass_kg: float = 1.0
@@ -14,6 +14,7 @@ static var PROJECTILE: PackedScene = preload("res://scenes/projectile.tscn")
 @onready var _muzzle_particles: GPUParticles3D = $Turret/Muzzle/GPUParticles3D
 @onready var _target: Basis = basis
 @onready var _turret_target: Basis = turret.basis
+var _level: Level = null
 var _controller: Controller = null
 var _throttle: float = 0.0
 var _next_shoot_time: float = 0.0
@@ -22,7 +23,10 @@ func _ready() -> void:
 	if controller:
 		_controller = controller.instantiate()
 		add_child(_controller)
-
+	for level in get_tree().get_nodes_in_group(&"levels"):
+		assert(not _level)
+		_level = level
+	
 func set_target(direction: Vector3) -> void:
 	assert(not direction.is_zero_approx() and direction.is_normalized())
 	_target = Basis.looking_at(direction, Vector3.UP)
@@ -51,11 +55,9 @@ func shoot(muzzle_velocity: float) -> void:
 	if _next_shoot_time > seconds:
 		return
 	_next_shoot_time = seconds + shoot_cooldown
-	var projectile = PROJECTILE.instantiate()
-	for level in get_tree().get_nodes_in_group(&"levels"):
-		level.add_child(projectile)
-		break
+	var projectile: Projectile = PROJECTILE.instantiate()
+	_level.add_child(projectile)
 	projectile.global_transform = muzzle.global_transform
 	projectile.shoot(muzzle_velocity)
 	_muzzle_particles.restart()
-	
+	_level.svo.compute_reachability(projectile.global_position, projectile.linear_velocity)

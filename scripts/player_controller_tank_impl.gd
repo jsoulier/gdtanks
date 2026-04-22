@@ -1,7 +1,7 @@
 class_name PlayerControllerTankImpl extends PlayerControllerImpl
 
 @export var sensitivity: float = 0.2
-@export var muzzle_velocity: float = 50.0
+@export var muzzle_velocity: float = 30.0
 var _yaw: float = 0.0
 var _pitch: float = 0.0
 

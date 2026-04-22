@@ -1,6 +1,6 @@
 class_name PlayerControllerFreeImpl extends PlayerControllerImpl
 
-@export var move_speed: float = 10.0
+@export var move_speed: float = 20.0
 @export var move_speed_min: float = 0.1
 @export var move_speed_max: float = 500.0
 @export var move_smoothing: float = 10.0

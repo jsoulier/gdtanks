@@ -77,23 +77,26 @@ class Triangle:
 
 const EMPTY: int = -1
 const SOLID: int = -2
-const COLOR: Color = Color.RED
 
-func _new_node() -> int:
-	var index: int = _nodes.size()
-	_nodes.append([EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY])
+func _new_node(nodes: Array) -> int:
+	var index: int = nodes.size()
+	nodes.append([EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY])
 	return index
 
 @export var scene: Node3D = null
 @export var excludes: Array[PackedScene] = []
 @export_range(1, 10) var max_depth: int = 5
 @export_range(1, 10) var debug_depth: int = max_depth
+@export_range(0.0, 60.0) var debug_duration: float = 20.0
+@export var debug_draw_nodes: bool = false
+@export var debug_draw_queries: bool = false
 @export_dir var out_directory: String = "res://data/"
 
-var _nodes: Array = []
+var _nodes: PackedInt64Array
 var _node_count: int = 0
 var _position: Vector3 = Vector3.ZERO
 var _size: float = 0.0
+var _min_voxel_size: float = 0.0
 var _max_depth: int = 0
 var _debug_lines: Array = []
 var _debug_depths: Array = []
@@ -102,12 +105,12 @@ func _ready() -> void:
 	_read()
 
 func _process(_delta: float) -> void:
-	if not visible:
+	if not debug_draw_nodes:
 		return
 	for i in range(_debug_depths.size()):
 		var _depth: int = _debug_depths[i]
 		if _depth == debug_depth - 1:
-			DebugDraw3D.draw_lines(_debug_lines[i], COLOR)
+			DebugDraw3D.draw_lines(_debug_lines[i], Color.YELLOW)
 
 func _write() -> void:
 	print("Building SVO for %s" % scene.name)
@@ -129,23 +132,25 @@ func _write() -> void:
 	var extents = scene_max - scene_min
 	_size = maxf(extents.x, maxf(extents.y, extents.z))
 	_position = scene_min
-	_nodes.clear()
-	_new_node()
-	_subdivide(triangles, 0, _position, _size, 0)
-	print("Got %d nodes" % _nodes.size())
+	var nodes: Array = []
+	_new_node(nodes)
+	_subdivide(nodes, triangles, 0, _position, _size, 0)
+	print("Got %d nodes" % nodes.size())
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_directory))
-	_write_nodes()
-	_write_metadata()
+	_write_nodes(nodes)
+	_write_metadata(nodes)
 	if Engine.is_editor_hint():
 		EditorInterface.get_resource_filesystem().scan()
 	print("Built SVO for %s" % scene.name)
 	_read()
 
 func _read() -> void:
+	_nodes = read_nodes()
 	var metadata: Dictionary = _read_metadata()
 	_node_count = metadata.node_count
 	_position = Vector3(metadata.position_x, metadata.position_y, metadata.position_z)
 	_size = metadata.size
+	_min_voxel_size = _size / pow(2.0, max_depth)
 	_max_depth = metadata.max_depth
 	_get_debug_lines()
 
@@ -186,7 +191,7 @@ func _get_child_position(in_position: Vector3, size: float, slot: int) -> Vector
 		z += size
 	return Vector3(x, y, z)
 
-func _subdivide(in_triangles: Array[Triangle], in_index: int, in_position: Vector3, size: float, depth: int) -> void:
+func _subdivide(nodes: Array, in_triangles: Array[Triangle], in_index: int, in_position: Vector3, size: float, depth: int) -> void:
 	var half_size: float = size * 0.5
 	for child_slot in range(8):
 		var child_position: Vector3 = _get_child_position(in_position, half_size, child_slot)
@@ -200,26 +205,25 @@ func _subdivide(in_triangles: Array[Triangle], in_index: int, in_position: Vecto
 			continue
 		# Solid leaf at max depth
 		if depth == max_depth - 1:
-			_nodes[in_index][child_slot] = SOLID
+			nodes[in_index][child_slot] = SOLID
 			continue
-		var old_node_count: int = _nodes.size()
-		var new_index: int = _new_node()
-		_nodes[in_index][child_slot] = new_index
-		_subdivide(triangles, new_index, child_position, half_size, depth + 1)
+		var old_node_count: int = nodes.size()
+		var new_index: int = _new_node(nodes)
+		nodes[in_index][child_slot] = new_index
+		_subdivide(nodes, triangles, new_index, child_position, half_size, depth + 1)
 		var is_solid: bool = true
-		for index in _nodes[new_index]:
+		for index in nodes[new_index]:
 			if index != SOLID:
 				is_solid = false
 				break
 		# Solid leaf
 		if is_solid:
-			_nodes[in_index][child_slot] = SOLID
-			_nodes.resize(old_node_count)
+			nodes[in_index][child_slot] = SOLID
+			nodes.resize(old_node_count)
 	
 func _get_debug_lines() -> void:
 	_debug_lines.clear()
 	_debug_depths.clear()
-	var nodes: PackedInt64Array = read_nodes()
 	var stack: Array = [[0, _position, _size, 0]]
 	while not stack.is_empty():
 		var element: Array = stack.pop_back()
@@ -229,7 +233,7 @@ func _get_debug_lines() -> void:
 		var depth: int = element[3]
 		var half_size: float = size * 0.5
 		for child_slot in range(8):
-			var child_index: int = nodes[index * 8 + child_slot]
+			var child_index: int = _nodes[index * 8 + child_slot]
 			var child_position: Vector3 = _get_child_position(location, half_size, child_slot)
 			if child_index == EMPTY:
 				continue
@@ -261,13 +265,13 @@ func _add_debug_box(in_min: Vector3, in_max: Vector3, in_depth: int) -> void:
 	_debug_lines.append(lines)
 	_debug_depths.append(in_depth)
 
-func _write_nodes() -> void:
+func _write_nodes(nodes: Array) -> void:
 	var path: String = ProjectSettings.globalize_path(out_directory.path_join("svo.bin"))
 	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
 	if file == null:
 		push_error("Failed to write to %s" % path)
 		return
-	for node in _nodes:
+	for node in nodes:
 		for child_index in node:
 			file.store_64(child_index)
 	file.close()
@@ -282,9 +286,9 @@ func read_nodes() -> PackedInt64Array:
 	file.close()
 	return bytes.to_int64_array()
 
-func _write_metadata() -> void:
+func _write_metadata(nodes: Array) -> void:
 	var metadata: Dictionary = {
-		"node_count": _nodes.size(),
+		"node_count": nodes.size(),
 		"position_x": _position.x,
 		"position_y": _position.y,
 		"position_z": _position.z,
@@ -308,3 +312,51 @@ func _read_metadata() -> Dictionary:
 	var metadata: Dictionary = JSON.parse_string(file.get_as_text())
 	file.close()
 	return metadata
+
+func compute_reachability(p: Vector3, v: Vector3) -> bool:
+	var start: float = 0.0
+	var midpoint: float = ProjectileMotion.time_of_apex(self, v)
+	var end: float = ProjectileMotion.time_of_flight(self, v)
+	return _bisect_segment(p, v, start, midpoint) and _bisect_segment(p, v, midpoint, end)
+
+func _draw_debug_aabb(aabb: AABB, color: Color):
+	if debug_draw_queries:
+		DebugDraw3D.draw_aabb(aabb, color, debug_duration)
+
+func _get_aabb(p: Vector3, v: Vector3, t0: float, t1: float) -> AABB:
+	var point1: Vector3 = ProjectileMotion.displacement(self, p, v, t0)
+	var point2: Vector3 = ProjectileMotion.displacement(self, p, v, t1)
+	return AABB(point1.min(point2), point1.max(point2) - point1.min(point2))
+
+func _bisect_segment(p: Vector3, v: Vector3, t0: float, t1: float) -> bool:
+	var aabb: AABB = _get_aabb(p, v, t0, t1)
+	if aabb.get_longest_axis_size() < _min_voxel_size:
+		if debug_draw_queries:
+			DebugDraw3D.draw_sphere(aabb.get_center(), 1.0, Color.RED, debug_duration)
+		return false
+	var hit: bool = not _check_aabb(aabb, 0, _position, _size)
+	if not hit:
+		return true
+	elif debug_draw_queries:
+		DebugDraw3D.draw_aabb(aabb, Color.ORANGE, debug_duration)
+	var midpoint: float = (t0 + t1) * 0.5
+	return _bisect_segment(p, v, t0, midpoint) and _bisect_segment(p, v, midpoint, t1)
+
+func _check_aabb(curve_aabb: AABB, node_index: int, node_position: Vector3, node_size: float) -> bool:
+	var node_aabb: AABB = AABB(node_position, Vector3.ONE * node_size)
+	if not curve_aabb.intersects(node_aabb):
+		return true
+	var half_size: float = node_size * 0.5
+	for child_slot in range(8):
+		var child_index: int = _nodes[node_index * 8 + child_slot]
+		if child_index == EMPTY:
+			continue
+		var child_position: Vector3 = _get_child_position(node_position, half_size, child_slot)
+		var child_aabb: AABB = AABB(child_position, Vector3.ONE * half_size)
+		if not curve_aabb.intersects(child_aabb):
+			continue
+		if child_index == SOLID:
+			return false
+		if not _check_aabb(curve_aabb, child_index, child_position, half_size):
+			return false
+	return true

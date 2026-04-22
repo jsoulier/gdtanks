@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://5ta7wgrjmhjt"]
 
+[ext_resource type="Script" uid="uid://dgst4gjugv0i" path="res://scripts/level.gd" id="1_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://bl8cxdd2yk7ng" path="res://scenes/svo.tscn" id="2_w7c3h"]
 [ext_resource type="PackedScene" uid="uid://b3qfed0n1wso4" path="res://scenes/tank.tscn" id="2_w8frs"]
 [ext_resource type="PackedScene" uid="uid://25n2ntptm3wp" path="res://scenes/player_controller.tscn" id="3_mx8sn"]
@@ -32,6 +33,7 @@ _surfaces = [{
 }]
 
 [node name="Level" type="Node3D" unique_id=2040351949 groups=["levels"]]
+script = ExtResource("1_mx8sn")
 
 [node name="SVO" parent="." unique_id=731219683 node_paths=PackedStringArray("scene") instance=ExtResource("2_w7c3h")]
 visible = false
@@ -39,6 +41,7 @@ scene = NodePath("..")
 excludes = Array[PackedScene]([ExtResource("2_w8frs")])
 max_depth = 7
 debug_depth = 7
+debug_draw_queries = true
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1497033466]
 transform = Transform3D(0.8660254, -0.35355338, 0.35355338, 0, 0.70710677, 0.70710677, -0.5, -0.6123724, 0.6123724, 0, 10, 10)
