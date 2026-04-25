@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://clh04vapxwg0x"]
+
+[ext_resource type="Shader" uid="uid://dkmy07p0uebaj" path="res://resources/explosion.gdshader" id="1_c6db4"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_c6db4")
+shader_parameter/lifetime_ratio = 0.0

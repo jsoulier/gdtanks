@@ -77,8 +77,7 @@ shape = SubResource("ConcavePolygonShape3D_mx8sn")
 mesh = SubResource("ArrayMesh_ppgk2")
 
 [node name="GPUParticlesCollisionHeightField3D" type="GPUParticlesCollisionHeightField3D" parent="Geometry" unique_id=1782535324]
-size = Vector3(95, 5, 95)
-resolution = 1
+size = Vector3(100, 1, 100)
 
 [node name="Spawnpoints" type="Node3D" parent="." unique_id=797087537]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

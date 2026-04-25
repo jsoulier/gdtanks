@@ -18,10 +18,15 @@ func _on_body_entered(_body: Node) -> void:
 	_explosion_particles.restart()
 	visible = false
 	freeze = true
-	await get_tree().create_timer(_explosion_particles.lifetime).timeout
+	var lifetime: float = _explosion_particles.lifetime
+	var time: float = 0.0
+	while time < lifetime:
+		time += get_process_delta_time()
+		_explosion_particles.set_instance_shader_parameter("lifetime", time / lifetime)
+		await get_tree().process_frame
 	queue_free()
 	_explosion_particles.queue_free()
 
 func _physics_process(_delta: float) -> void:
 	if not linear_velocity.is_zero_approx():
-		look_at(global_position + linear_velocity)
+		look_at(global_position + linear_velocity.normalized())

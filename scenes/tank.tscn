@@ -27,10 +27,8 @@ turbulence_noise_scale = 0.0
 turbulence_noise_speed_random = 4.0
 turbulence_influence_max = 0.2
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qrxud"]
-
 [sub_resource type="BoxMesh" id="BoxMesh_01nm4"]
-material = SubResource("StandardMaterial3D_qrxud")
+material = ExtResource("2_c4xvs")
 size = Vector3(0.1, 0.1, 0.1)
 
 [node name="Tank" type="CharacterBody3D" unique_id=1525166348]
@@ -84,7 +82,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 [node name="GPUParticles3D" type="GPUParticles3D" parent="Turret/Muzzle" unique_id=764631847]
 cast_shadow = 0
 emitting = false
-amount = 256
+amount = 512
 lifetime = 0.4
 one_shot = true
 explosiveness = 0.75
