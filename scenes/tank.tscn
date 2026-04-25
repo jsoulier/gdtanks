@@ -28,7 +28,6 @@ turbulence_noise_speed_random = 4.0
 turbulence_influence_max = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qrxud"]
-albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_01nm4"]
 material = SubResource("StandardMaterial3D_qrxud")
