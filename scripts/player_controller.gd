@@ -88,3 +88,6 @@ func get_inv_view_buffer() -> PackedFloat32Array:
 
 func get_inv_proj_buffer() -> PackedFloat32Array:
 	return _get_buffer(get_inv_proj_matrix())
+
+func get_controller_color() -> Color:
+	return Color.BLUE

@@ -1,13 +1,25 @@
 [gd_scene format=3 uid="uid://b3qfed0n1wso4"]
 
 [ext_resource type="Script" uid="uid://bhnmcqvg5hvr0" path="res://scripts/tank.gd" id="1_qrxud"]
-[ext_resource type="Material" uid="uid://c2mq4dhnxgcdr" path="res://resources/tank.tres" id="2_c4xvs"]
+[ext_resource type="Material" uid="uid://dsw8nclj0b2gs" path="res://resources/color.tres" id="2_c4xvs"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_vbf0h"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qrxud"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_c4xvs"]
+
+[sub_resource type="Shader" id="Shader_01nm4"]
+code = "shader_type spatial;
+
+void fragment() {
+	ALBEDO = vec3(0.0f, 0.0f, 1.0f);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k4vtj"]
+render_priority = 0
+shader = SubResource("Shader_01nm4")
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_01nm4"]
 points = PackedVector3Array(-0.5, -0.25, -0.5, 0.5, 0.25, 0.5, 0.5, -0.25, 0.5, 0.5, 0.25, -0.5, -0.5, 0.25, 0.5, 0.5, -0.25, -0.5, -0.5, -0.25, 0.5, -0.5, 0.25, -0.5)
@@ -28,7 +40,6 @@ turbulence_noise_speed_random = 4.0
 turbulence_influence_max = 0.2
 
 [sub_resource type="BoxMesh" id="BoxMesh_01nm4"]
-material = ExtResource("2_c4xvs")
 size = Vector3(0.1, 0.1, 0.1)
 
 [node name="Tank" type="CharacterBody3D" unique_id=1525166348]
@@ -38,8 +49,8 @@ script = ExtResource("1_qrxud")
 
 [node name="FrontMeshInstance3D" type="MeshInstance3D" parent="." unique_id=928402918]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+material_override = ExtResource("2_c4xvs")
 mesh = SubResource("BoxMesh_vbf0h")
-surface_material_override/0 = ExtResource("2_c4xvs")
 
 [node name="FrontCollisionShape3D" type="CollisionShape3D" parent="." unique_id=1945117501]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
@@ -47,8 +58,8 @@ shape = SubResource("BoxShape3D_qrxud")
 
 [node name="BackMeshInstance3D" type="MeshInstance3D" parent="." unique_id=1270439681]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+material_override = ExtResource("2_c4xvs")
 mesh = SubResource("BoxMesh_vbf0h")
-surface_material_override/0 = ExtResource("2_c4xvs")
 
 [node name="BackCollisionShape3D" type="CollisionShape3D" parent="." unique_id=434967056]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
@@ -61,16 +72,17 @@ collision_mask = 0
 
 [node name="TurretMeshInstance3D" type="MeshInstance3D" parent="Turret" unique_id=632562552]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, 0, 0)
+material_override = ExtResource("2_c4xvs")
 mesh = SubResource("BoxMesh_c4xvs")
-surface_material_override/0 = ExtResource("2_c4xvs")
+surface_material_override/0 = SubResource("ShaderMaterial_k4vtj")
 
 [node name="TurretCollisionShape3D" type="CollisionShape3D" parent="Turret" unique_id=387413224]
 shape = SubResource("ConvexPolygonShape3D_01nm4")
 
 [node name="BarrelMeshInstance3D" type="MeshInstance3D" parent="Turret" unique_id=646792733]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 1.5, 0, 0, -1.25)
+material_override = ExtResource("2_c4xvs")
 mesh = SubResource("BoxMesh_c4xvs")
-surface_material_override/0 = ExtResource("2_c4xvs")
 
 [node name="BarrelCollisionShape3D" type="CollisionShape3D" parent="Turret" unique_id=1292329578]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.25)
@@ -80,6 +92,7 @@ shape = SubResource("ConvexPolygonShape3D_vbf0h")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="Turret/Muzzle" unique_id=764631847]
+material_override = ExtResource("2_c4xvs")
 cast_shadow = 0
 emitting = false
 amount = 512

@@ -1,6 +1,9 @@
 class_name Projectile extends RigidBody3D
 
+@onready var _body_mesh_instance: MeshInstance3D = $BodyMeshInstance3D
+@onready var _tip_mesh_instance: MeshInstance3D = $TipMeshInstance3D
 @onready var _explosion_particles: GPUParticles3D = $ExplosionGPUParticles3D
+@onready var _trail_particles: GPUParticles3D = $TrailGPUParticles3D
 var _level: Level = null
 
 func _ready() -> void:
@@ -8,8 +11,12 @@ func _ready() -> void:
 		assert(not _level)
 		_level = level
 
-func shoot(muzzle_velocity: float) -> void:
+func shoot(muzzle_velocity: float, color: Vector3) -> void:
 	linear_velocity = -global_basis.z * muzzle_velocity
+	_body_mesh_instance.set_instance_shader_parameter(&"color", color)
+	_tip_mesh_instance.set_instance_shader_parameter(&"color", color)
+	_explosion_particles.set_instance_shader_parameter(&"color", color)
+	_trail_particles.set_instance_shader_parameter(&"color", color)
 
 func _on_body_entered(_body: Node) -> void:
 	remove_child(_explosion_particles)

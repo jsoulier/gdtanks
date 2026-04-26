@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dsw8nclj0b2gs"]
+
+[ext_resource type="Shader" uid="uid://cfl2tmmavwib3" path="res://resources/color.gdshader" id="1_nktl5"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_nktl5")

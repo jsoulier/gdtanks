@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cnn721gphwry8"]
+
+[ext_resource type="PackedScene" uid="uid://b2tms2u31flhh" path="res://scenes/controller.tscn" id="1_0blnn"]
+[ext_resource type="Script" uid="uid://cbk7l6552mr5x" path="res://scripts/ai_controller.gd" id="2_nuadq"]
+
+[node name="AIController" unique_id=2067793415 instance=ExtResource("1_0blnn")]
+script = ExtResource("2_nuadq")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." index="0" unique_id=2117472486]
